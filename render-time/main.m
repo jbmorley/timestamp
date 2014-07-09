@@ -114,14 +114,15 @@ int main(int argc, const char * argv[])
     CGFloat centerY = [defaults floatForKey:kDefaultCenterY];
     
     if ([files count] == 0) {
-      printf("usage: render-time [-radius RADIUS] [-centerX CENTERX] [-centerY CENTERY] image1 [image2 ...]\n"
-             "\n"
-             "Render an analog clock showing the EXIF timestamp into an image.\n"
-             "\n"
-             "optional arguments:\n"
-             " -radius RADIUS       Radius of the clock\n"
-             " -centerX CENTERX     The x-coordinate of the center of the clock\n"
-             " -centerY CENTERY     The y-coordinate of the center of the clock\n");
+      fprintf(stderr,
+              "usage: render-time [-radius RADIUS] [-centerX CENTERX] [-centerY CENTERY] image1 [image2 ...]\n"
+              "\n"
+              "Render an analog clock showing the EXIF timestamp into an image.\n"
+              "\n"
+              "optional arguments:\n"
+              " -radius RADIUS       Radius of the clock\n"
+              " -centerX CENTERX     The x-coordinate of the center of the clock\n"
+              " -centerY CENTERY     The y-coordinate of the center of the clock\n");
       return 1;
     }
     
@@ -145,6 +146,9 @@ int main(int argc, const char * argv[])
           NSData *data = [tiffRep representationUsingType:NSJPEGFileType properties:imageProperties];
           [data writeToFile:@"output.jpg" atomically:YES];
         }
+      } else {
+        fprintf(stderr, "ERROR: Unable to read '%s'.\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
+        return 1;
       }
     }
     
