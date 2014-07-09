@@ -95,8 +95,7 @@ int main(int argc, const char * argv[])
       NSLog(@"Processing '%@'...", file);
       
       // Load the date and only attempt to render a clock if we have a time.
-      NSUInteger hours = 5;
-      NSUInteger minutes = 5;
+      NSUInteger hours, minutes;
       if (getTime(file, &hours, &minutes)) {
         
         // Render the clock.
