@@ -72,7 +72,6 @@ static BOOL getTime(NSString *path, NSUInteger *hours, NSUInteger *minutes)
   }
   
   // Parse the date.
-  // TODO Time zones.
   NSArray *components = [date componentsSeparatedByString:@" "];
   NSArray *time = [components[1] componentsSeparatedByString:@":"];
   *hours = [time[0] integerValue];
