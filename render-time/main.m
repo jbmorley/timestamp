@@ -14,13 +14,11 @@ static CGPoint point(CGPoint center, CGFloat angle, CGFloat r) {
   return CGPointMake(center.x + (r * cos(t)), center.y + (r * sin(t)));
 }
 
-void renderTime(CGContextRef context, NSUInteger hours, NSUInteger minutes)
+void renderTime(CGContextRef context, NSUInteger hours, NSUInteger minutes, CGFloat radius, CGPoint center)
 {
-  static CGFloat lineWidth = 8.0;
-  static CGFloat radius = 60.0;
   static CGFloat hourScale = 0.6;
   static CGFloat minuteScale = 0.8;
-  static CGPoint center = { 100.0, 100.0 };
+  CGFloat lineWidth = radius / 7.5;
 
   // Set up.
   NSColor *color = [NSColor whiteColor];
@@ -106,7 +104,7 @@ int main(int argc, const char * argv[])
           NSImage *image = [[NSImage alloc] initWithContentsOfFile:file];
           [image lockFocus];
           CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-          renderTime(context, hours, minutes);
+          renderTime(context, hours, minutes, 200.0, CGPointMake(300.0, 300.0));
           [image unlockFocus];
           NSBitmapImageRep *tiffRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
           NSDictionary *imageProperties = @{NSImageCompressionFactor: @0.5};
