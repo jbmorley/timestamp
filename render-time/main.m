@@ -114,7 +114,7 @@ int main(int argc, const char * argv[])
     CGFloat centerY = [defaults floatForKey:kDefaultCenterY];
     
     if ([files count] == 0) {
-      printf("usage: render-time [-radius RADIUS] [-centerX CENTERX] image1 [image2 [image3 ...]]\n"
+      printf("usage: render-time [-radius RADIUS] [-centerX CENTERX] [-centerY CENTERY] image1 [image2 ...]\n"
              "\n"
              "Render an analog clock showing the EXIF timestamp into an image.\n"
              "\n"
