@@ -92,7 +92,7 @@ int main(int argc, const char * argv[])
     
     // Process the files.
     for (NSString *file in files) {
-      NSLog(@"Processing '%@'...", file);
+      printf("Processing '%s'...\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
       
       // Load the date and only attempt to render a clock if we have a time.
       NSUInteger hours, minutes;
