@@ -113,6 +113,18 @@ int main(int argc, const char * argv[])
     CGFloat centerX = [defaults floatForKey:kDefaultCenterX];
     CGFloat centerY = [defaults floatForKey:kDefaultCenterY];
     
+    if ([files count] == 0) {
+      printf("usage: render-time [-radius RADIUS] [-centerX CENTERX] image1 [image2 [image3 ...]]\n"
+             "\n"
+             "Render an analog clock showing the EXIF timestamp into an image.\n"
+             "\n"
+             "optional arguments:\n"
+             " -radius RADIUS       Radius of the clock\n"
+             " -centerX CENTERX     The x-coordinate of the center of the clock\n"
+             " -centerY CENTERY     The y-coordinate of the center of the clock\n");
+      return 1;
+    }
+    
     // Process the files.
     for (NSString *file in files) {
       printf("Processing '%s'...\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
