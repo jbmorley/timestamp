@@ -72,6 +72,7 @@ static BOOL getTime(NSString *path, NSUInteger *hours, NSUInteger *minutes)
   }
   
   // Parse the date.
+  // TODO Time zones.
   NSArray *components = [date componentsSeparatedByString:@" "];
   NSArray *time = [components[1] componentsSeparatedByString:@":"];
   *hours = [time[0] integerValue];
@@ -83,12 +84,34 @@ int main(int argc, const char * argv[])
 {
   @autoreleasepool {
     
-    // Process the arguments.
-    NSMutableArray *files = [NSMutableArray arrayWithCapacity:3];
-    for (int i = 1; i < argc; i++) {
-      NSString *argument = [NSString stringWithUTF8String:argv[i]];
-      [files addObject:argument];
+    static NSString *const kDefaultRadius = @"radius";
+    static NSString *const kDefaultCenterX = @"centerX";
+    static NSString *const kDefaultCenterY = @"centerY";
+    
+    // Register the defaults.
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults registerDefaults:@{kDefaultRadius: @60.0,
+                                 kDefaultCenterX: @100.0,
+                                 kDefaultCenterY: @100.0}];
+    
+    // Strip the defaults from the arguments.
+    NSArray *arguments = [[NSProcessInfo processInfo] arguments];
+    NSMutableArray *files = [[NSMutableArray alloc] init];
+    NSInteger index = 1;
+    while (index < [arguments count]) {
+      NSString *argument = arguments[index];
+      NSRange range = [argument rangeOfString:@"-"];
+      if (range.location == 0) {
+        index = index + 2;
+      } else {
+        [files addObject:argument];
+        index = index + 1;
+      }
     }
+    
+    CGFloat radius = [defaults floatForKey:kDefaultRadius];
+    CGFloat centerX = [defaults floatForKey:kDefaultCenterX];
+    CGFloat centerY = [defaults floatForKey:kDefaultCenterY];
     
     // Process the files.
     for (NSString *file in files) {
@@ -103,7 +126,7 @@ int main(int argc, const char * argv[])
           NSImage *image = [[NSImage alloc] initWithContentsOfFile:file];
           [image lockFocus];
           CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-          renderTime(context, hours, minutes, 200.0, CGPointMake(300.0, 300.0));
+          renderTime(context, hours, minutes, radius, CGPointMake(centerX, centerY));
           [image unlockFocus];
           NSBitmapImageRep *tiffRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
           NSDictionary *imageProperties = @{NSImageCompressionFactor: @0.5};
