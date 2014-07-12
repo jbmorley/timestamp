@@ -1,7 +1,7 @@
 timestamp
 =========
 
-Render an analog clock showing the EXIF timestamp into an image.
+Objective-C utility to render an analog clock showing the EXIF timestamp into an image.
 
 Examples
 --------
