@@ -31,10 +31,10 @@ Building
 From the root of the project:
 
 ```
-xcodebuild build
+./scripts/build.sh
 ```
 
-The resulting binary will be located in `build/Release/timestamp`.
+The resulting binary will be located in `build/Release/timestamp` and the tar.gz will be located in `build/timestamp.tar.gz`.
 
 Limitations
 -----------
