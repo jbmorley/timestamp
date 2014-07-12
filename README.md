@@ -21,3 +21,7 @@ optional arguments:
   -centerX CENTERX     The x-coordinate of the center of the clock
   -centerY CENTERY     The y-coordinate of the center of the clock
 ```
+
+Limitations
+-----------
+- Meta-data is not transferred to the new file.
