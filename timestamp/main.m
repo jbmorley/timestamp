@@ -152,7 +152,6 @@ int main(int argc, const char * argv[])
         if (getTime(file, &hours, &minutes)) {
           
           // Determine the output filename.
-          NSString *extension = [file pathExtension];
           NSString *directory = [file stringByDeletingLastPathComponent];
           NSString *filename = [[file lastPathComponent] stringByDeletingPathExtension];
           NSString *output = [[directory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-timestamp", filename]] stringByAppendingPathExtension:@"jpg"];
