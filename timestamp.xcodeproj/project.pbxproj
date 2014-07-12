@@ -49,7 +49,7 @@
 		D87040ED194971230079B892 = {
 			isa = PBXGroup;
 			children = (
-				D87040FB194971230079B892 /* render-time */,
+				D87040FB194971230079B892 /* timestamp */,
 				D87040F8194971230079B892 /* Frameworks */,
 				D87040F7194971230079B892 /* Products */,
 			);
@@ -72,14 +72,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D87040FB194971230079B892 /* render-time */ = {
+		D87040FB194971230079B892 /* timestamp */ = {
 			isa = PBXGroup;
 			children = (
 				D87040FC194971230079B892 /* main.m */,
 				D8704100194971230079B892 /* render_time.1 */,
 				D87040FE194971230079B892 /* Supporting Files */,
 			);
-			path = "render-time";
+			path = "timestamp";
 			sourceTree = "<group>";
 		};
 		D87040FE194971230079B892 /* Supporting Files */ = {
@@ -106,7 +106,7 @@
 			dependencies = (
 			);
 			name = timestamp;
-			productName = "render-time";
+			productName = "timestamp";
 			productReference = D87040F6194971230079B892 /* timestamp */;
 			productType = "com.apple.product-type.tool";
 		};
@@ -222,7 +222,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "render-time/timestamp-Prefix.pch";
+				GCC_PREFIX_HEADER = "timestamp/timestamp-Prefix.pch";
 				PRODUCT_NAME = timestamp;
 			};
 			name = Debug;
@@ -231,7 +231,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "render-time/timestamp-Prefix.pch";
+				GCC_PREFIX_HEADER = "timestamp/timestamp-Prefix.pch";
 				PRODUCT_NAME = timestamp;
 			};
 			name = Release;
