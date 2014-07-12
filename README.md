@@ -21,8 +21,8 @@ formatted.
 
 optional arguments:
  -radius RADIUS       Radius of the clock
-  -centerX CENTERX     The x-coordinate of the center of the clock
-  -centerY CENTERY     The y-coordinate of the center of the clock
+ -centerX CENTERX     The x-coordinate of the center of the clock
+ -centerY CENTERY     The y-coordinate of the center of the clock
 ```
 
 Building
