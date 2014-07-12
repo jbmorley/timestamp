@@ -25,6 +25,11 @@ optional arguments:
  -centerY CENTERY     The y-coordinate of the center of the clock
 ```
 
+Releases
+--------
+
+- [Version 1.0.0](http://downloads.jbmorley.co.uk/timestamp/timestamp.1.0.0.tar.gz) - 12/07/2014
+
 Building
 --------
 
