@@ -22,6 +22,17 @@ optional arguments:
   -centerY CENTERY     The y-coordinate of the center of the clock
 ```
 
+Building
+--------
+
+From the root of the project:
+
+```
+xcodebuild build
+```
+
+The resulting binary will be located in `build/Release/timestamp`.
+
 Limitations
 -----------
 - Meta-data is not transferred to the new file.
