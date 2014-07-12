@@ -114,7 +114,7 @@ int main(int argc, const char * argv[])
     
     if ([files count] == 0) {
       fprintf(stderr,
-              "usage: render-time [-radius RADIUS] [-centerX CENTERX] [-centerY CENTERY] image1 [image2 ...]\n"
+              "usage: timestamp [-radius RADIUS] [-centerX CENTERX] [-centerY CENTERY] image1 [image2 ...]\n"
               "\n"
               "Render an analog clock showing the EXIF timestamp into an image.\n"
               "\n"
