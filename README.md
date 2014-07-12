@@ -3,6 +3,9 @@ timestamp
 
 Render an analog clock showing the EXIF timestamp into an image.
 
+Examples
+--------
+
 ![Large Clock](graphics/timestamp.jpg)
 
 Usage
