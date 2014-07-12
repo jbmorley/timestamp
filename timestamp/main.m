@@ -132,6 +132,9 @@ int main(int argc, const char * argv[])
               "\n"
               "Render an analog clock showing the EXIF timestamp into an image.\n"
               "\n"
+              "Output files will have '-timestamp' appended to the filename and will JPEG\n"
+              "formatted.\n"
+              "\n"
               "optional arguments:\n"
               " -radius RADIUS       Radius of the clock\n"
               " -centerX CENTERX     The x-coordinate of the center of the clock\n"
@@ -141,14 +144,20 @@ int main(int argc, const char * argv[])
     
     // Process the files.
     for (NSString *file in files) {
-      printf("Processing '%s'...\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
+      @autoreleasepool {
+        printf("Processing '%s'...\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
       
-      // Load the date and only attempt to render a clock if we have a time.
-      NSUInteger hours, minutes;
-      if (getTime(file, &hours, &minutes)) {
+        // Load the date and only attempt to render a clock if we have a time.
+        NSUInteger hours, minutes;
+        if (getTime(file, &hours, &minutes)) {
+          
+          // Determine the output filename.
+          NSString *extension = [file pathExtension];
+          NSString *directory = [file stringByDeletingLastPathComponent];
+          NSString *filename = [[file lastPathComponent] stringByDeletingPathExtension];
+          NSString *output = [[directory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-timestamp", filename]] stringByAppendingPathExtension:@"jpg"];
         
-        // Render the clock.
-        @autoreleasepool {
+          // Render the clock.
           NSImage *image = [[NSImage alloc] initWithContentsOfFile:file];
           [image lockFocus];
           CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
@@ -157,11 +166,16 @@ int main(int argc, const char * argv[])
           NSBitmapImageRep *tiffRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
           NSDictionary *imageProperties = @{NSImageCompressionFactor: @0.5};
           NSData *data = [tiffRep representationUsingType:NSJPEGFileType properties:imageProperties];
-          [data writeToFile:@"output.jpg" atomically:YES];
+          BOOL success = [data writeToFile:output atomically:YES];
+          if (NO == success) {
+            fprintf(stderr, "ERROR: Unable to write to '%s'.\n", [output cStringUsingEncoding:NSUTF8StringEncoding]);
+          }
+        
+        } else {
+          fprintf(stderr, "ERROR: Unable to read '%s'.\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
+          return 1;
         }
-      } else {
-        fprintf(stderr, "ERROR: Unable to read '%s'.\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
-        return 1;
+        
       }
     }
     
