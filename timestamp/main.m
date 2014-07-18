@@ -93,6 +93,60 @@ static BOOL getTime(NSString *path, NSUInteger *hours, NSUInteger *minutes)
   return YES;
 }
 
+CGImageRef CGImageCreateWithCGContext(CGContextRef context)
+{
+  CFDataRef data = CFDataCreate(kCFAllocatorDefault,
+                                CGBitmapContextGetData(context),
+                                CGBitmapContextGetBytesPerRow(context) * CGBitmapContextGetHeight(context));
+  CGDataProviderRef provider = CGDataProviderCreateWithCFData(data);
+  CGImageRef image = CGImageCreate(CGBitmapContextGetWidth(context),
+                                   CGBitmapContextGetHeight(context),
+                                   CGBitmapContextGetBitsPerComponent(context),
+                                   CGBitmapContextGetBitsPerPixel(context),
+                                   CGBitmapContextGetBytesPerRow(context),
+                                   CGBitmapContextGetColorSpace(context),
+                                   CGBitmapContextGetBitmapInfo(context),
+                                   provider,
+                                   NULL,
+                                   NO,
+                                   kCGRenderingIntentDefault);
+  CGDataProviderRelease(provider);
+  CFRelease(data);
+  return image;
+}
+
+CGContextRef CGContextCreateWithCGImage(CGImageRef image)
+{
+  size_t kBitsPerComponent = 8;
+  size_t kBytesPerPixel = 4;
+  CGContextRef context = CGBitmapContextCreate(NULL,
+                                               CGImageGetWidth(image),
+                                               CGImageGetHeight(image),
+                                               kBitsPerComponent,
+                                               CGImageGetWidth(image) * kBytesPerPixel,
+                                               CGImageGetColorSpace(image),
+                                               (CGBitmapInfo)kCGImageAlphaPremultipliedFirst);
+  if (context == NULL) {
+    return NULL;
+  }
+  CGContextDrawImage(context,
+                     CGRectMake(0.0,
+                                0.0,
+                                CGImageGetWidth(image),
+                                CGImageGetHeight(image)),
+                     image);
+  
+  return context;
+}
+
+CGContextRef CGContextCreateWithNSImage(NSImage *image)
+{
+  NSBitmapImageRep *representation = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+  CGImageRef cgImage = [representation CGImage];
+  CGContextRef context = CGContextCreateWithCGImage(cgImage);
+  return context;
+}
+
 int main(int argc, const char * argv[])
 {
   @autoreleasepool {
@@ -158,18 +212,23 @@ int main(int argc, const char * argv[])
         
           // Render the clock.
           NSImage *image = [[NSImage alloc] initWithContentsOfFile:file];
-          [image lockFocus];
-          CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+          CGContextRef context = CGContextCreateWithNSImage(image);
           renderTime(context, hours, minutes, radius, CGPointMake(centerX, centerY));
-          [image unlockFocus];
-          NSBitmapImageRep *tiffRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+          CGImageRef result = CGImageCreateWithCGContext(context);
+          CGContextRelease(context);
+          
+          NSBitmapImageRep *contextRep = [[NSBitmapImageRep alloc] initWithCGImage:result];
+          [contextRep setSize:[image size]];
           NSDictionary *imageProperties = @{NSImageCompressionFactor: @0.5};
-          NSData *data = [tiffRep representationUsingType:NSJPEGFileType properties:imageProperties];
+          NSData *data = [contextRep representationUsingType:NSJPEGFileType properties:imageProperties];
           BOOL success = [data writeToFile:output atomically:YES];
           if (NO == success) {
             fprintf(stderr, "ERROR: Unable to write to '%s'.\n", [output cStringUsingEncoding:NSUTF8StringEncoding]);
           }
-        
+          
+          CGImageRelease(result);
+
+
         } else {
           fprintf(stderr, "ERROR: Unable to read '%s'.\n", [file cStringUsingEncoding:NSUTF8StringEncoding]);
           return 1;
