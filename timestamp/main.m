@@ -115,6 +115,16 @@ CGImageRef CGImageCreateWithCGContext(CGContextRef context)
   return image;
 }
 
+NSImage *NSImageCreateWithCGContext(CGContextRef context)
+{
+  CGImageRef imageRef = CGImageCreateWithCGContext(context);
+  NSImage *image = [[NSImage alloc] initWithCGImage:imageRef
+                                               size:NSMakeSize(CGImageGetWidth(imageRef),
+                                                               CGImageGetHeight(imageRef))];
+  CGImageRelease(imageRef);
+  return image;
+}
+
 CGContextRef CGContextCreateWithCGImage(CGImageRef image)
 {
   size_t kBitsPerComponent = 8;
